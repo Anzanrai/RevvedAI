@@ -9,13 +9,6 @@ const studentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    groupID:{
-        type:String
-    },
-    attendanceID:{
-        type:String
-        
-    },
     password:{
         type:String,
         required:true
@@ -36,11 +29,31 @@ const studentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    address:{
-        type:String,
-        required:true
-    }
-
+    address:[
+        {type:{
+            addressStreet: {type: String, required: true},
+            addressState: {type: String, required: true},
+            addressZipCode: {type: Number, required: true}
+        }}
+    ]
 })
 
-module.exports = mongoose.model('Student',studentSchema)
+const studentSchema = mongoose.model('Student', studentSchema)
+
+const attendanceSchema = new mongoose.Schema({
+    studentID: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Student',
+        required: true
+    },
+    attendanceDate: {
+        type: Date,
+        required: true
+    }
+})
+
+const attendanceSchema = mongoose.model('Attendance', attendanceSchema)
+
+module.exports = {
+    studentSchema: studentSchema,
+    attendanceSchema: attendanceSchema
+}
