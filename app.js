@@ -1,6 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const url ='mongodb://localhost/studyapp'
+const url ='mongodb://localhost:27017/studyapp'
 
 const app =express()
 mongoose.connect(url,{useNewUrlParser:true})
@@ -18,6 +18,6 @@ app.use('/student',studentRouter)
 const eventRouter =require('./routes/event')
 app.use('/event',eventRouter)
 
-app.listen(9000,()=>{
+app.listen(8000,()=>{
     console.log('Server Started')
 })
