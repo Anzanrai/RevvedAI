@@ -1,15 +1,13 @@
 const mongoose = require('mongoose')
 
-const studentSchema = new mongoose.Schema({
-    firstName:{
+const student = new mongoose.Schema({
+    firstName:{ type:String,required:true},
+    lastName:{type:String, required:true},
+    password:{type:String,required:true},
+    username:{
         type:String,
         required:true
     },
-    lastName:{
-        type:String,
-        required:true
-    },
-    userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     semester:{
         type:String,
         required:true
@@ -31,9 +29,9 @@ const studentSchema = new mongoose.Schema({
     ]
 })
 
-const studentSchema = mongoose.model('Student', studentSchema)
+const studentSchema = mongoose.model('Student', student)
 
-const attendanceSchema = new mongoose.Schema({
+const attendance = new mongoose.Schema({
     studentID: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Student',
         required: true
@@ -44,7 +42,7 @@ const attendanceSchema = new mongoose.Schema({
     }
 })
 
-const attendanceSchema = mongoose.model('Attendance', attendanceSchema)
+const attendanceSchema = mongoose.model('Attendance', attendance)
 
 module.exports = {
     studentSchema: studentSchema,

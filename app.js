@@ -15,6 +15,9 @@ app.use(express.json())
 const studentRouter =require('./routes/student')
 app.use('/student',studentRouter)
 
+const eventRouter =require('./routes/event')
+app.use('/event',eventRouter)
+
 app.listen(9000,()=>{
     console.log('Server Started')
 })
