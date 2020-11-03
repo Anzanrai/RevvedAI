@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const student = new mongoose.Schema({
-    firstName:{ type:String,required:true},
+    firstName:{ type:String, required:true},
     lastName:{type:String, required:true},
     password:{type:String,required:true},
     username:{
@@ -21,11 +21,11 @@ const student = new mongoose.Schema({
         required:true
     },
     address:[
-        {type:{
+        {
             addressStreet: {type: String, required: true},
             addressState: {type: String, required: true},
             addressZipCode: {type: Number, required: true}
-        }}
+        }
     ]
 })
 
