@@ -12,6 +12,9 @@ con.on('open',()=>{
 
 app.use(express.json())
 
+const userRouter = require('./routes/user');
+app.use('/user', userRouter);
+
 const studentRouter =require('./routes/student')
 app.use('/student',studentRouter)
 

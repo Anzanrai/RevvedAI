@@ -7,9 +7,12 @@ const teacherSchema = new mongoose.Schema({
     email: {type:String, required:true},
     address:[
         {type:{
-            addressStreet: {type: String, required: true},
-            addressState: {type: String, required: true},
-            addressZipCode: {type: Number, required: true}
+            streetName: {type: String, required: true},
+            streetNumber: {type: String, required: true},
+            suburb: {type: String, required: true},
+            city: {type: String, required: true},
+            state: {type: String, required: true},
+            zipcode: {type: Number, required: true}
         }}
     ]
 })

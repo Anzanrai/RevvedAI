@@ -1,7 +1,8 @@
+// import {Student} from "../models/student";
 const express = require('express')
 
 const router= express.Router()
-const Student = require('../models/student')
+const {Student} = require('../models/student')
 
 router.get('/',async(req,res)=>{
     //console.log('Get request')
@@ -34,25 +35,17 @@ router.post('/',async(req,res)=>{
     const student = new Student({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        groupID: req.body.groupID,
-        attendanceID: req.body.attendanceID,
-        password: req.body.password,
-        username: req.body.username,
-        semester: req.body.semester,
         email: req.body.email,
         phone: req.body.phone,
-        address:req.body.address
-
-
+        address: req.body.address,
+        guardian: req.body.guardian
     })
 
     try{
         const s1=await student.save()
-        res.json(s1)
-
-        
+        res.json(s1)        
     }catch(err){
-        res.send('Error')
+        res.send('Error'+err)
     }
 
 })

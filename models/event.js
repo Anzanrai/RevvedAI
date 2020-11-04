@@ -7,7 +7,7 @@ const milestoneSchema= new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("MileStone", milestoneSchema)
+// module.exports = mongoose.model("MileStone", milestoneSchema)
 
 const eventSchema= new mongoose.Schema({
     eventName:{type: String,required: true},
