@@ -7,7 +7,6 @@ const milestoneSchema= new mongoose.Schema({
 
 });
 
-// module.exports = mongoose.model("MileStone", milestoneSchema)
 
 const eventSchema= new mongoose.Schema({
     eventName:{type: String,required: true},
@@ -24,5 +23,10 @@ const eventSchema= new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model('MileStone', milestoneSchema)
-module.exports = mongoose.model('Event', eventSchema)
+const milestone = mongoose.model('MileStone', milestoneSchema)
+const event = mongoose.model('Event', eventSchema)
+
+module.exports={
+    Event: event,
+    Milestone: milestone
+}
