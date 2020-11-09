@@ -3,6 +3,7 @@ const express = require('express')
 const router= express.Router()
 const {Event} = require('../models/event')
 const {Milestone} = require('../models/event')
+const {Test} = require('../models/milestone')
 
 router.get('/',async(req,res)=>{
     console.log('Get request')
@@ -86,6 +87,15 @@ router.put('/:id',async(req,res)=>{
 
     }catch(err){
         res.send('Error'+err)
+    }
+})
+
+router.post('/testmilestone', async(req, res) => {
+    try{
+        const testmilestone = new Test(req.body)
+        testmilestone.save();
+    } catch(error){
+        res.send("Error "+ error)
     }
 })
 module.exports = router
