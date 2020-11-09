@@ -1,45 +1,16 @@
+// const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const express = require('express')
 const mongoose = require('mongoose')
+const { auth } = require('./middleware/auth')
+const { RegisterUser, LoginUser, LogoutUser,getUserDetails } = require('./controllers/authController');
 const url ='mongodb://localhost:27017/studyapp'
 
 //Notification modules
-const webpush=require('web-push');
-const bodyParser =require('body-parser');
+// const webpush=require('web-push');
+// const bodyParser =require('body-parser');
 const path=require('path');
 const app =express()
-
-//Set static path
-app.use(express.static(path.join(__dirname, "client")));
-app.use(bodyParser.json());
-
-const publicVapidKey='BHb6sJc9wmjqEvnnQwTVwrKXLd4UXgI6be2dzE3mKimMy2orUPaTVNtTlzQerGT_jVepLWmTsM7dXOHRPO_H17U'
-const privateVapidKey='TGvJ63-WFmxusitZn5NjDgiCpSfny-xBNYftM0NRQXQ'
-
-webpush.setVapidDetails(
-    "mailto:test@test.com",
-    publicVapidKey,
-    privateVapidKey
-);
-
-// Subscribe Route
-app.post("/subscribe", (req, res) => {
-    // Get pushSubscription object
-    const subscription = req.body;
-  
-    // Send 201 - resource created
-    res.status(201).json({});
-  
-    // Create payload
-    const payload = JSON.stringify({ title: "Push Test" });
-  
-    // Pass object into sendNotification
-    webpush
-      .sendNotification(subscription, payload)
-      .catch(err => console.error(err));
-  });
-
-
-
 
 mongoose.connect(url,{useNewUrlParser:true})
 const con = mongoose.connection
@@ -49,9 +20,15 @@ con.on('open',()=>{
 })
 
 app.use(express.json())
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const userRouter = require('./routes/user');
 app.use('/user', userRouter);
+app.post('/api/users/register', RegisterUser);
+app.post('/api/users/login', LoginUser);
+app.get('/api/users/auth', auth, getUserDetails);
+app.get('/api/users/logout', auth, LogoutUser);
 
 const studentRouter =require('./routes/student')
 app.use('/student',studentRouter)
@@ -59,7 +36,6 @@ app.use('/student',studentRouter)
 const eventRouter =require('./routes/event')
 app.use('/event',eventRouter)
 
-
-app.listen(9000,()=>{
+app.listen(8000, ()=>{
     console.log('Server Started')
 })
