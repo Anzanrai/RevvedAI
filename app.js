@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const express = require('express')
 const mongoose = require('mongoose')
 const { auth } = require('./middleware/auth')
-const { RegisterUser, LoginUser, LogoutUser,getUserDetails } = require('./controllers/authController');
+const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./controllers/authController');
 const url ='mongodb://localhost:27017/studyapp'
 
 //Notification modules
@@ -20,15 +20,13 @@ con.on('open',()=>{
 })
 
 app.use(express.json())
-// app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 const userRouter = require('./routes/user');
 app.use('/user', userRouter);
-app.post('/api/users/register', RegisterUser);
-app.post('/api/users/login', LoginUser);
-app.get('/api/users/auth', auth, getUserDetails);
-app.get('/api/users/logout', auth, LogoutUser);
+const authRouter = require('./routes/authentication');
+app.use('/authentication', authRouter);
 
 const studentRouter =require('./routes/student')
 app.use('/student',studentRouter)
