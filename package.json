@@ -14,11 +14,16 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jade": "^1.11.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.10",
     "mongoose-extend-schema": "^1.0.0",
-    "mongoose-unique-validator": "^2.0.3"
+    "mongoose-unique-validator": "^2.0.3",
+    "nstore": "^0.5.2",
+    "socket.io": "^3.0.1",
+    "speakeasy": "^2.0.0",
+    "twilio": "^3.51.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
