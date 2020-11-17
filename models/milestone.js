@@ -3,14 +3,14 @@ const extendSchema = require('mongoose-extend-schema')
 
 
 const milestoneSchema= new mongoose.Schema({
-    milestoneName:{type: String, required: true},
+    //milestoneName:{type: String, required: true},
     milestoneIsCompleted:{type: Boolean, default: false},
-    milestoneDueDate:{type:Date}
+    milestoneDueDate:{type:Date,default:false}
 });
 
 
 const testmilestoneSchema = extendSchema(milestoneSchema,{
-    milestoneName:{
+    testmilestoneName:{
         type:[{type: String, 
             enum:["Organizing the notes","Revise Actively","Recalling the answers","Practise different kind of questions"]}],
             required: true
@@ -46,14 +46,14 @@ const assignmentmilestoneSchema = extendSchema(milestoneSchema,{
 
 
 const milestone = mongoose.model('MileStone', milestoneSchema)
-// const test = mongoose.model('Test', testmilestoneSchema)
+const test = mongoose.model('Test', testmilestoneSchema)
 const project = mongoose.model('Project', projectmilestoneSchema)
 const assignment = mongoose.model('Assignment', assignmentmilestoneSchema)
 
 
 module.exports={
     Milestone: milestone,
-    Test: mongoose.model('Test', testmilestoneSchema),
+    Test: test,
     Project: project,
     Assignment: assignment
 }
