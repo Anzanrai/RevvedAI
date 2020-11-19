@@ -49,7 +49,10 @@ const student = new mongoose.Schema({
     ]
 })
 
-const studentSchema = mongoose.model('Student', student)
+
+
+
+
 
 const attendance = new mongoose.Schema({
     studentID: {
