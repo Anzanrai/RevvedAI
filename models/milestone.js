@@ -3,14 +3,14 @@ const extendSchema = require('mongoose-extend-schema')
 
 
 const milestoneSchema= new mongoose.Schema({
-    //milestoneName:{type: String, required: true},
+    milestonetype:{type: String, enum:['Assignment','Test','Projects'],required: true},
     milestoneIsCompleted:{type: Boolean, default: false},
     milestoneDueDate:{type:Date,default:false}
 });
 
 
 const testmilestoneSchema = extendSchema(milestoneSchema,{
-    testmilestoneName:{
+    milestoneName:{
         type:[{type: String, 
             enum:["Organizing the notes","Revise Actively","Recalling the answers","Practise different kind of questions"]}],
             required: true
@@ -22,7 +22,7 @@ const testmilestoneSchema = extendSchema(milestoneSchema,{
 
 
 const projectmilestoneSchema = extendSchema(milestoneSchema,{
-    projectmilestoneSchema:{
+    milestoneName:{
         type:[{type: String, 
             enum:["Deciding on a project","Planning out for the project","Researching the project","Creating your project"]}],
             required: true
@@ -34,7 +34,7 @@ const projectmilestoneSchema = extendSchema(milestoneSchema,{
 
 
 const assignmentmilestoneSchema = extendSchema(milestoneSchema,{
-    assignmentmilestoneSchema:{
+    milestoneName:{
         type:[{type: String, 
             enum:["Plan","Analyse the question","Draft an outline","Find information","Write","Edit and Proofread"]}],
             required: true
