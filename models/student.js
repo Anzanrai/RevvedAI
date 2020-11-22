@@ -68,6 +68,6 @@ const attendance = new mongoose.Schema({
 const attendanceSchema = mongoose.model('Attendance', attendance)
 
 module.exports = {
-    Student: studentSchema,
+    Student: mongoose.model('Student', student),
     Attendance: attendanceSchema
 }

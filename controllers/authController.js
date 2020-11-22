@@ -3,6 +3,7 @@ const User = require('../models/user');
 
 exports.RegisterUser = async (req, res) => {
     const user = new User(req.body);
+    console.log(req.body)
     user.save()
     .then(success => {
         res.status(200).json({success: true, message: "Successfully Signed Up.", success})
@@ -28,7 +29,6 @@ exports.LoginUser = (req, res) => {
                             username: user.username,
                             usertype: user.userType,
                             email: user.email,
-                            token: user.token
                         }
                         //saving token to cookie
                         res.cookie('authToken', user.token).status(200).json({
@@ -42,6 +42,7 @@ exports.LoginUser = (req, res) => {
         })
     })
     .catch(error=> {
+        console.log(error)
         res.status(400).send({success: false, message: "Credentials provided do not match."})
     })
 }
