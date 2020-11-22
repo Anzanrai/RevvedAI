@@ -69,6 +69,9 @@ const eventRouter =require('./routes/event');
 // const { UserInstance } = require('twilio/lib/rest/chat/v1/service/user');
 app.use('/event',eventRouter)
 
+app.get('/', (req, res) => {
+    res.send("Hello There")
+})
 app.listen(8000, ()=>{
     console.log('Server Started')
 })
