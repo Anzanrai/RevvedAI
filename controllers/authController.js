@@ -1,43 +1,26 @@
-const { User } = require('../models/user');
+const User = require('../models/user');
 
 
 exports.RegisterUser = async (req, res) => {
     const user = new User(req.body);
-    try{
-        await user.save((err, doc) => {
-            if (err) {
-                return res.status(422).json({errors:err})
-            } else {
-                const userData = {
-                    username: doc.username,
-                    userType: doc.lastName,
-                    email: doc.email,
-                }
-                return res.status(200).json({
-                    success: true,
-                    message: 'Successfully Signed Up',
-                    userData
-                })
-            }
-        });
-    } catch(error) {
-        res.send('Error '+error)
-    }
-    
+    console.log(req.body)
+    user.save()
+    .then(success => {
+        res.status(200).json({success: true, message: "Successfully Signed Up.", success})
+    })
+    .catch(error => {
+        res.status(422).json(error)
+    })
 }
 
 exports.LoginUser = (req, res) => {
-    User.findOne({ 'email': req.body.email }, (err, user) => {
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User email not found!'});
-        } else {
-            user.comparePassword(req.body.password, (err, isMatch) => {
-                console.log(isMatch);
-    //isMatch is eaither true or false
-            if (!isMatch) {
-                return res.status(400).json({ success: false, message: 'Wrong Password!' });
+    User.findOne({'email': req.body.email})
+    .then(success => {
+        success.comparePassword(req.body.password, (err, isMatch)=> {
+            if(!isMatch){
+                return res.status(400).json({success: false, message: "Credentials provided do not match"})
             } else {
-                user.generateToken((err, user) => {
+                success.generateToken((err, user) => {
                     if (err) {
                         return res.status(400).send({ err });
                     } else {
@@ -46,9 +29,8 @@ exports.LoginUser = (req, res) => {
                             username: user.username,
                             usertype: user.userType,
                             email: user.email,
-                            token: user.token
                         }
-        //saving token to cookie
+                        //saving token to cookie
                         res.cookie('authToken', user.token).status(200).json({
                             success: true,
                             message: 'Successfully Logged In!',
@@ -57,12 +39,16 @@ exports.LoginUser = (req, res) => {
                     }
                 });
             }
-        });
-        }
-    });
+        })
+    })
+    .catch(error=> {
+        console.log(error)
+        res.status(400).send({success: false, message: "Credentials provided do not match."})
+    })
 }
 
 exports.LogoutUser = (req, res) => {
+    console.log(req.user);
     User.findByIdAndUpdate({ _id: req.user._id }, { token: ''}, (err) => {
         if (err) return res.json({ success: false, err })
         return res.status(200).send({ success: true, message: 'Successfully Logged Out!' });
