@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const student = new mongoose.Schema({
     firstName:{type:String, required:true},
     lastName:{type:String, required:true},
-    // userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     school: {
         schoolName: {type: String},
         schoolAddress: {

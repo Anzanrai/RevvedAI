@@ -1,5 +1,15 @@
 const User = require('../models/user');
 
+// env variables for Twilio OTP
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const revvedAIVerifyCode = process.env.REVVEDAI_VERIFY_CODE;
+const client = require('twilio')(accountSid, authToken);
+
+const generateOTP = (phone) => {
+    
+}
+
 
 exports.RegisterUser = async (req, res) => {
     const user = new User(req.body);
@@ -11,6 +21,26 @@ exports.RegisterUser = async (req, res) => {
     .catch(error => {
         res.status(422).json(error)
     })
+}
+
+exports.GenerateOTPForLogin = (req, res) => {
+    const phone = req.body.phone;
+    client.verify.services(revvedAIVerifyCode)
+    .verifications
+    .create({to: phone.toString(), channel: 'sms'})
+    .then(verification => res.status(200).json(verification))
+    .catch(error => res.status(400).json(error))
+}
+
+exports.VerifyOTPForLogin = (req, res) => {
+    const phone = req.body.phone;
+    const otp = req.body.otp;
+
+    client.verify.services(revvedAIVerifyCode)
+    .verificationChecks
+    .create({to: phone.toString(), code: otp.toString()})
+    .then(verification_check => res.status(200).json(verification_check))
+    .catch(error => res.status(400).json(error))
 }
 
 exports.LoginUser = (req, res) => {
@@ -63,6 +93,14 @@ exports.getUserDetails= (req, res) => {
         email: req.user.email,
     });
 };
+
+exports.FacebookLoginSuccess = (req, res) => {
+    return res.send("Facebook login successful");
+}
+
+exports.FacebookLoginFail = (req, res) => {
+    return res.send("Facebook login failed");
+}
 //finally in Index.js 
 // const app = require('express')();
 // require('dotenv').config();

@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const { json } = require('body-parser');
+// const { json } = require('body-parser');
 
 // to list out users
 const getUsers = (req, res) => {
