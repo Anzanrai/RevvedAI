@@ -6,14 +6,14 @@ const teacherSchema = new mongoose.Schema({
     userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     email: {type:String, required:true},
     address:[
-        {type:{
+        {
             streetName: {type: String, required: true},
             streetNumber: {type: String, required: true},
             suburb: {type: String, required: true},
             city: {type: String, required: true},
             state: {type: String, required: true},
             zipcode: {type: Number, required: true}
-        }}
+        }
     ]
 })
 

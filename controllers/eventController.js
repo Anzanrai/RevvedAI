@@ -41,7 +41,7 @@ const registerEvent = (req, res) => {
 
 
 const updateEvent = (req, res) => {
-    let event  = new Event.findById(req.params.id)
+    let event = Event.findById(req.params.id)
         event.eventName= req.body.eventName
         event.eventType=req.body.eventType
         event.eventDate= req.body.eventDate

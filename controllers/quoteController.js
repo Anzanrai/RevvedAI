@@ -2,9 +2,11 @@ const Quote = require('../models/quote');
 
 
 const getQuotes = (req, res) => {
-    let tag=req.body.quotetag || "Assignment"
-  Quote.aggregate([{ $match: { quotetag : tag} },{ $sample: { size: 1 } }])
+    console.log(req)
+    let tag= req.query.tag || "Assignment"
+    Quote.aggregate([{ $match: { quotetag : tag} },{ $sample: { size: 2 } }])
     .then(success => {
+        console.log(success);
         res.json(success)
     })
     .catch(error=> {

@@ -5,7 +5,7 @@ const QuoteSchema = new mongoose.Schema({
     quoteName: {type:String},
     quotetag:{
         type: String,
-        enum:['Assignment','Test','Projects'],
+        enum:['Assignment','Test','Project'],
         required: true},
 });
 

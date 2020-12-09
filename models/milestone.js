@@ -5,6 +5,7 @@ const {User}= require('./user')
 const milestoneSchema= new mongoose.Schema({
     milestonetype:{type: String, enum:['Assignment','Test','Projects'],required: true},
     milestoneIsCompleted:{type: Boolean, default: false},
+    milestoneProgress: {type: Number, min: 0, max: 100},
     milestoneDueDate:{type:Date,default:false}
 });
 

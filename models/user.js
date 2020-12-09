@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     email: {type: String, required: [true, "Email is required"], unique: [true, "Account already registered with this email."], trim: true},
     password: {type: String, required: [true, "Password is required"], minlength: 8},
     userType: {type: String, required: [true, "User type is required"], trim: true},
-    token: {type: String}
+    fbId: {type: String}
 });
 
 //saving user data
@@ -54,7 +54,8 @@ userSchema.statics.findByToken = function (token, callBack) {
     var user = this;
     jwt.verify(token, process.env.SECRETE, function (err, decode) {//this decode must give user_id if token is valid .ie decode=user_id
     
-    user.findOne({ "_id": decode, "token": token }, function (err, user) {
+    console.log(decode.toString());
+    user.findById({ "_id": decode, "token": token }, function (err, user) {
         if (err) return callBack(err);
         callBack(null, user);
     });
@@ -64,3 +65,5 @@ userSchema.statics.findByToken = function (token, callBack) {
 userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("User", userSchema)
+
+// 5fba337559074ed495c84341

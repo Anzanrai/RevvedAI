@@ -3,6 +3,7 @@ const express = require('express')
 
 const router= express.Router()
 const {Student} = require('../models/student')
+const {createStudentProfile} = require('../controllers/studentController')
 
 router.get('/', async(req,res)=>{
     //console.log('Get request')
@@ -31,26 +32,29 @@ router.get('/:id',async(req,res)=>{
 
 
 
-router.post('/',async(req,res)=>{
-    const student = new Student({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        phone: req.body.phone,
-        address: req.body.address,
-        guardian: req.body.guardian
-    })
+// router.post('/', async(req,res)=>{
+//     const student = new Student({
+//         firstName: req.body.firstName,
+//         lastName: req.body.lastName,
+//         email: req.body.email,
+//         phone: req.body.phone,
+//         address: req.body.address,
+//         guardian: req.body.guardian
+//     })
 
-    try{
-        const s1=await student.save()
-        res.json(s1)        
-    }catch(err){
-        res.send('Error'+err)
-    }
+//     try{
+//         const s1=await student.save()
+//         res.json(s1)        
+//     }catch(err){
+//         res.send('Error'+err)
+//     }
 
-})
+// })
 
-router.patch('/:id',async(req,res)=>{
+router.post('/', createStudentProfile);
+// router.post('/otp_verify', verifyOTP);
+
+router.patch('/:id', async(req,res)=>{
     try{
         const student = await Student.findById(req.params.id)
         /* student.firstName= req.body.firstName

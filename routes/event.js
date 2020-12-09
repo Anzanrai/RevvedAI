@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const Event = require("../models/event");
+const {auth} = require("../middleware/auth");
 const {getEvents, getEventsById, registerEvent, updateEvent} = require("../controllers/eventController");
 
 
 router.get('/', getEvents);
-router.post('/', registerEvent);
+router.post('/', auth, registerEvent);
 router.get('/:id', getEventsById);
 router.get('/:id', updateEvent);
 
