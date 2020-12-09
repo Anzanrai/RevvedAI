@@ -4,8 +4,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const { auth } = require('./middleware/auth')
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./controllers/authController');
-// const url ='mongodb://localhost:27017/studyapp'
-const url = 'mongodb+srv://anjanraiz:anjanraiz@cluster0.l82k5.mongodb.net/revvedAI?retryWrites=true&w=majority'
+const url ='mongodb://localhost:27017/studyapp'
+//const url = 'mongodb+srv://anjanraiz:anjanraiz@cluster0.l82k5.mongodb.net/revvedAI?retryWrites=true&w=majority'
 
 // const MongoClient = require('mongodb').MongoClient;
 // const uri = "mongodb+srv://anjanraiz:<password>@cluster0.l82k5.mongodb.net/<dbname>?retryWrites=true&w=majority";

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const extendSchema = require('mongoose-extend-schema')
-
+const {User}= require('./user')
 
 const milestoneSchema= new mongoose.Schema({
     milestonetype:{type: String, enum:['Assignment','Test','Projects'],required: true},
