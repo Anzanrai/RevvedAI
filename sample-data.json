@@ -1,0 +1,115 @@
+// Need OTP input from user
+{
+    "otp": "uhasdfjksaugtgierwg9d230954kjlfew"
+}
+
+
+// Welcome screen after login
+{
+    // "authToken":"asd7f8s99fa08f90uv9saf8",
+    "firstName":"George"
+}
+
+// Personal Details data required for personal details page
+{
+    "firstName":"George",
+    "lastName":"Rashford",
+    "school":"Singularity University",
+    "id":"1428",
+    "mobile":"0424401822",
+    "email":"george@unsw.edu.au",
+    "telephone":"0424401822",
+    "address1":"2-10 Powell Street",
+    "suburb":"Homebush",
+    "city":"Sydney",
+    "state":"NSW",
+    "postalCode":"2140"
+}
+
+// Homescreen
+{
+    "firstName":"George",
+    "dueMilestonesCount":4,
+    "motivationalQuote":"If opportunity does not knock, build a door."
+}
+
+// Right side drawer
+[
+    {
+        "eventName":"Event 1",
+        "milestoneName":"Health Plus",
+        "eventDescription":".......",
+        "milestoneIsCompleted":false
+    },
+    {
+        "eventName":"Event 2",
+        "milestoneName":"Fitband",
+        "eventDescription":".....",
+        "milestoneIsCompleted":"true"
+    },
+    {
+        "eventName":"Event 3",
+        "milestoneName":"Plus",
+        "eventDescription":"....",
+        "milestoneIsCompleted":"true"
+    }
+]
+
+// EventScreen with calendar
+[
+    {
+      "eventDate":"2020-05-09",
+      "eventName":"Fitbit Seminar"
+    }
+]
+
+// Eventdetails for a day with time
+[
+    {
+        "goalName":"Fitband",
+        "countTasksDue":3,
+        "location":"Laws hall",
+        "dueDate":"2020-12-14",
+        "dueTime":"10:00 a.m."
+    },
+    {
+        "goalName":"Muse",
+        "countTasksDue":1,
+        "location":"Laws hall",
+        "dueDate":"2020-12-14",
+        "dueTime":"20:00 p.m."
+    }
+]
+
+
+// Input required for Create event screen
+{
+    "eventName": "Final Assessment",
+    "eventType": "Assignment",
+    "subject": "Subject Code", //select from drop-down,
+    "eventDate": "2020-12-20",
+    "eventTime": "17:00",
+    "eventDescription": "Something about the event. May be some kind of detail to display."
+}
+
+// Input for milestone status through slider
+{
+    "milestoneProgress": 98
+}
+
+
+// success response payload
+{
+    "code": 200, // any successful http status code [200, 201]
+    "data": ["data"], // data successfully retrieved 
+    "message": "OK"
+}
+
+// error response payload
+{
+    "code": 400, // any error http status code [400, 401, 403, 404, 500]
+    "message": ["error 1", "error 2"] // array of errors
+}
+
+//VARK => Visual, Audio, Reading and Writing, Kinestatic
+

@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const {check} = require("express-validator");
+
 const auth = (req, res, next) => {
     let token = req.cookies.authToken || req.headers["x-access-token"] || req.headers["authorization"]
     
@@ -24,4 +26,6 @@ const auth = (req, res, next) => {
     //     res.status(400).send("Invalid token.");
     //   }
 }
-module.exports = { auth }
+module.exports = { 
+    auth
+}

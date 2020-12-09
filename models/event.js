@@ -13,7 +13,8 @@ const eventSchema= new mongoose.Schema({
     eventType:{type: String, enum:['Assignment','Test','Projects'], required: true},
     eventDate:{type: Date, required: true},
     eventDescription:{type: String, required: true},
-
+    eventSubject: {type: mongoose.Schema.Types.ObjectId, ref: 'Student'},
+    student: {type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true},
     addeventMilestones:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'MileStone'
