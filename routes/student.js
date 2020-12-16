@@ -3,7 +3,7 @@ const express = require('express')
 
 const router= express.Router()
 const {Student} = require('../models/student')
-const {createStudentProfile} = require('../controllers/studentController')
+const {createStudentProfile, getStudentByUserID} = require('../controllers/studentController')
 
 router.get('/', async(req,res)=>{
     //console.log('Get request')
@@ -29,6 +29,9 @@ router.get('/:id',async(req,res)=>{
     }
 
 })
+
+
+router.get('/profile/:userID', getStudentByUserID)
 
 
 

@@ -113,3 +113,242 @@
 
 //VARK => Visual, Audio, Reading and Writing, Kinestatic
 
+
+/** to generate OTP and send it to entered mobile number.
+@Method: POST
+@request.body : {
+    "phone": "+61XXXXXXXXX" considering the Aussie market for now.
+}
+*/
+<server_url>/auth/mobile/generate-otp
+/**
+@response: {
+    "message": "OTP has been sent to XXXXXXX6221",
+    "code": 200,
+    "data": {
+        "sid": "VE03be5940127ceda20548f83b7f09e573",
+        "serviceSid": "VA139e934f36e3ab866e688a9fcdf590ea",
+        "accountSid": "ACdce72590a93e2ebf32e8ddf4c2848885",
+        "to": "+61424706221",
+        "channel": "sms",
+        "status": "pending",
+        "valid": false,
+        "lookup": {
+            "carrier": {
+                "mobile_country_code": "505",
+                "type": "mobile",
+                "error_code": null,
+                "mobile_network_code": "03",
+                "name": "Vodafone Australia Pty Ltd"
+            }
+        },
+        "amount": null,
+        "payee": null,
+        "sendCodeAttempts": [
+            {
+                "channel": "sms",
+                "time": "2020-12-10T22:51:49.410Z"
+            }
+        ],
+        "dateCreated": "2020-12-10T22:51:49.000Z",
+        "dateUpdated": "2020-12-10T22:51:49.000Z",
+        "url": "https://verify.twilio.com/v2/Services/VA139e934f36e3ab866e688a9fcdf590ea/Verifications/VE03be5940127ceda20548f83b7f09e573"
+    }
+}
+*/
+
+
+
+
+/** to verify OTP
+@Method: POST
+@request.body : {
+    "phone": "+61XXXXXXXXX",
+    "otp": "XXXXXX"
+} 
+*/
+<server_url>/auth/mobile/verification-otp
+/**
+* in case of wrong otp submission
+@response: {
+    "message": "OTP verification failed.",
+    "code": 400
+}
+
+* in case of correct otp submission
+@header: cookie.authToken = 'sdfa09ewfu0dfewf9sd90fwe0923908' // authToken is embedded in cookie
+@response: {
+    "message": "OTP verification successful!!",
+    "code": 200,
+    "data": {
+        "userID": "5fd00431c2b5db0d6590a78c",
+        "username": "anjanraiz",
+        "email": "rai.unknown@gmail.com"
+        "usertype": "Student"
+    }
+}
+*/
+
+
+/**
+to get student profile by userID
+@method: GET
+*/
+<server_url>/student/profile/<userID>
+/**
+@response: {
+    "message": "OK",
+    "code": 200,
+    "data": {
+        "_id": "5fd08dfacde1b210679a5ade",
+        "userID": "5fd00431c2b5db0d6590a78c",
+        "firstName": "Anjan",
+        "lastName": "Rai",
+        "phone": "+61424706221",
+        "email": "rai.unknown@gmail.com",
+        "address": [
+            {
+                "_id": "5fd08dfacde1b210679a5adf",
+                "streetName": "Powell Street",
+                "streetNumber": "2-10",
+                "suburb": "Homebush",
+                "city": "Sydney",
+                "state": "NSW",
+                "zipcode": 2140
+            }
+        ],
+        "guardian": [
+            {
+                "_id": "5fd08dfacde1b210679a5ae0",
+                "firstName": "Sanu",
+                "lastName": "Rai",
+                "phone": "+9779843471279",
+                "email": "sanu.rai@gmail.com",
+                "address": [
+                    {
+                        "_id": "5fd08dfacde1b210679a5ae1",
+                        "streetName": "Powell Street",
+                        "streetNumber": "2-10",
+                        "suburb": "Homebush",
+                        "city": "Sydney",
+                        "state": "NSW",
+                        "zipcode": 2140
+                    }
+                ]
+            }
+        ],
+        "__v": 0
+    }
+}
+*/
+
+
+
+/**
+@method: POST,
+@queryParams: studentId
+*/
+<server_url>/event?studentId=5fd08dfacde1b210679a5ade
+/**
+@response: {
+    "message": "OK",
+    "code": 200,
+    "data": [
+        {
+            "addeventMilestones": [],
+            "_id": "5fd56b5d6c999017634ac3c9",
+            "eventName": "test",
+            "eventType": "Assignment",
+            "eventDate": "2020-11-26T00:00:00.000Z",
+            "eventDescription": "just a test event",
+            "student": "5fd08dfacde1b210679a5ade",
+            "__v": 0
+        }
+    ]
+}
+*/
+
+
+/**
+@method: GET
+
+event details for a day
+*/
+
+<server_url>/event?eventDate=2020-11-26
+/**
+@response: {
+    "message": "OK",
+    "code": 200,
+    "data": [
+        {
+            "addeventMilestones": [],
+            "_id": "5fd56b5d6c999017634ac3c9",
+            "eventName": "test",
+            "eventType": "Assignment",
+            "eventDate": "2020-11-26T00:00:00.000Z",
+            "eventDescription": "just a test event",
+            "student": "5fd08dfacde1b210679a5ade",
+            "__v": 0
+        }
+    ]
+}
+*/
+
+
+/**
+to create an event
+@method: POST
+@req.body = {
+    "eventName": "test",
+    "eventType": "Assignment",
+    "eventDate": "2020-11-26",
+    "eventDescription": "just a test event",
+    "student": "5fd08dfacde1b210679a5ade"
+}
+*/
+<server_url>/event
+
+/**
+{
+    "message": "Event Created",
+    "code": 201,
+    "data": {
+        "addeventMilestones": [],
+        "_id": "5fd584eacb05131982961086",
+        "eventName": "test-event",
+        "eventType": "Project",
+        "eventDate": "2020-11-26T00:00:00.000Z",
+        "eventDescription": "just a test event of type project",
+        "student": "5fd08dfacde1b210679a5ade",
+        "__v": 0
+    }
+}
+*/
+
+
+
+/**
+to update the milestone progress
+@method: POST
+@req.body: {
+    milestoneProgress: 97  // number between 0 and 100
+}
+*/
+
+<server_url>/milestone/:id
+/**
+@response: {
+    "message": "OK",
+    "code: 204,
+    "data": {
+        "_id": "324u2i3o4u23o5iu4fg",
+        "milestoneType": "Test",
+        "milestoneIsCompleted": false,
+        "milestoneProgress": 25,
+        "milestoneDueDate": "2020-12-26",
+        "milestoneName": "Milestone 1",
+        "milestonePhase": "Phase 1"
+    }
+}
+*/

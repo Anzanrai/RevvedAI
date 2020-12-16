@@ -8,9 +8,9 @@ const {getTest, getProject, getAssignment,
     updateTest, updateProject, updateAssignment} = require("../controllers/milestoneController");
 
 
-router.get('/test', getTest);
+router.get('/test/', getTest);
 router.get('/', getProject);
-router.get('/', getAssignment);
+router.get('/assignment/', getAssignment);
 
 router.get('/:id', getTestById);
 router.get('/:id', getProjectById);
@@ -18,11 +18,11 @@ router.get('/:id', getAssignmentById);
 
 router.post('/test', registerTest);
 router.post('/', registerProject);
-router.post('/', registerAssignment);
+router.post('/assignment/', registerAssignment);
 
 
-router.get('/:id', updateTest);
+router.get('/test/:id', updateTest);
 router.get('/:id', updateProject);
-router.get('/:id', updateAssignment);
+router.get('/assignment/:id', updateAssignment);
 
 module.exports = router;

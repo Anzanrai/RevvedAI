@@ -6,10 +6,14 @@ const SALT = 10;
 var uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = new mongoose.Schema({
-    username: {type: String, required: [true, "Username is required"], unique: [true, "Username already taken."], trim: true},
-    email: {type: String, required: [true, "Email is required"], unique: [true, "Account already registered with this email."], trim: true},
-    password: {type: String, required: [true, "Password is required"], minlength: 8},
-    userType: {type: String, required: [true, "User type is required"], trim: true},
+    // username: {type: String, required: [true, "Username is required"], unique: [true, "Username already taken."], trim: true},
+    username: {type: String, unique: [true, "Username already taken."], trim: true},
+    // email: {type: String, required: [true, "Email is required"], unique: [true, "Account already registered with this email."], trim: true},
+    email: {type: String, unique: [true, "Account already registered with this email."], trim: true},
+    // password: {type: String, required: [true, "Password is required"], minlength: 8},
+    password: {type: String, minlength: 8},
+    userType: {type: String, required: [true, "User type is required"], enum: ["Student", "Teacher", "Guardian"], trim: true},
+    phone: {type: String, unique:[true, "This phone number is already registered."], trim: true},
     fbId: {type: String}
 });
 

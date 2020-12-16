@@ -8,8 +8,8 @@ const FacebookStrategy = strategy.Strategy;
 const User = require('./models/user');
 const { auth } = require('./middleware/auth')
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./controllers/authController');
-const url ='mongodb://localhost:27017/studyapp'
-//const url = 'mongodb+srv://anjanraiz:anjanraiz@cluster0.l82k5.mongodb.net/revvedAI?retryWrites=true&w=majority'
+// const url ='mongodb://localhost:27017/studyapp'
+const url = 'mongodb+srv://anjanraiz:anjanraiz@cluster0.l82k5.mongodb.net/revvedAI?retryWrites=true&w=majority'
 
 const PORT = process.env.PORT || 8080
 
@@ -23,7 +23,7 @@ const http = require('http').createServer(app)
 // const app = http.createServer()
 const io = require('socket.io')(http)
 
-mongoose.connect(url,{useNewUrlParser:true, useUnifiedTopology: true})
+mongoose.connect(url,{useNewUrlParser:true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false})
 const con = mongoose.connection
 
 con.on('open',()=>{
@@ -129,7 +129,7 @@ app.use('/student', studentRouter)
 
 const eventRouter =require('./routes/event');
 // const { UserInstance } = require('twilio/lib/rest/chat/v1/service/user');
-app.use('/event',eventRouter)
+app.use('/event', eventRouter)
 app.use('/quotes', require('./routes/quote'));
 
 app.get('/', (req, res) => {

@@ -48,72 +48,41 @@ exports.GenerateOTPForLogin = (req, res) => {
     
 }
 
+// verify otp and if successful, generate authToken and send it embedding in cookie
 exports.VerifyOTPForLogin = (req, res) => {
     const phone = req.body.phone;
     const otp = req.body.otp;
+    let status = "pending";
+    let valid = false;
+    let user = {};
 
-    client.verify.services(revvedAIVerifyCode)
+    User.findOne({"phone": phone})
+    .then(success => {user = success})
+    .catch(error => console.log(error))
+    const resultObj = client.verify.services(revvedAIVerifyCode)
     .verificationChecks
     .create({to: phone.toString(), code: otp.toString()})
     .then(verification_check => {
-        console.log(verification_check)
-        if(verification_check.valid && verification_check.status === "approved") {
-            Student.findOne({"phone": phone})
-            .then(student => {
-                User.findById(student.userID)
-                .then(success => {
-                    // console.log(success);
-                    success.generateToken((err, user) => {
-                        if (err) {
-                            return res.status(400).json(errorResponse(err, res.statusCode));
-                        } else {
-                            const data = {
-                                userID: user._id,
-                                username: user.username,
-                                usertype: user.userType,
-                                email: user.email,
-                            }
-                            //saving token to cookie
-                            res.cookie('authToken', user.token).status(200).json(successResponse("OTP verification successful!!", data, res.statusCode))
-                        }
-                    })
-                })
-                .catch(error => console.log(error))
+        status = verification_check.status
+        valid = verification_check.valid
+        if(valid && status === "approved"){
+            user.generateToken((err, user) => {
+                if (err) {
+                    return res.status(400).json(errorResponse(err, res.statusCode));
+                } else {
+                    const data = {
+                        userID: user._id,
+                        username: user.username,
+                        usertype: user.userType,
+                        email: user.email,
+                    }
+                    //saving token to cookie
+                    res.cookie('authToken', user.token).status(200).json(successResponse("OTP verification successful!!", data, res.statusCode))
+                }
             })
-            .catch(error => console.log(error))
         }
-        
-        // console.log(verification_check);
-        // if(verification_check.valid && verification_check.status === "approved"){
-        //     Student.findOne({"phone": phone})
-        //     .then(student => {
-        //         User.findById(student.userID)
-        //         .then(success => {
-        //             return success.generateToken((err, user) => {
-        //                 if (err) {
-        //                     return res.status(400).json(errorResponse(err, res.statusCode));
-        //                 } else {
-        //                     const data = {
-        //                         userID: user._id,
-        //                         username: user.username,
-        //                         usertype: user.userType,
-        //                         email: user.email,
-        //                     }
-        //                     //saving token to cookie
-        //                     res.cookie('authToken', user.token).status(200).json(successResponse("OTP verification successful!!", data, res.statusCode))
-        //                 }
-        //             })
-        //         })
-        //         .catch(error => res.status(400).json(errorResponse("User associated with the student profile not found", res.statusCode)))
-        //     })
-        //     .catch(error => {
-        //         res.status(404).json(errorResponse("Student with the provided phone number not found.". res.statusCode))
-        //     })
-        //     // res.status(200).json(successResponse("Verification successful", verification_check, res.statusCode))
-        // }
-        // res.status(400).json(errorResponse("OTP verification failed.", res.statusCode))
     })
-    .catch(error => res.status(400).json(errorResponse("Provided OTP is no longer valid. Please try verification with new OTP.", res.statusCode)))
+    .catch(error => res.status(400).json(errorResponse("OTP verification failed.", res.statusCode)))
 }
 
 exports.LoginUser = (req, res) => {
