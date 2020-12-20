@@ -88,7 +88,7 @@ const eventRouter =require('./routes/event');
 app.use('/event', eventRouter)
 app.use('/quotes', require('./routes/quote'));
 
-app.get('/', (req, res) => {
+app.get('', (req, res) => {
     res.send("Hello There")
 })
 http.listen(PORT, ()=>{
