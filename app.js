@@ -37,11 +37,11 @@ app.use(cookieParser());
 passport.serializeUser(function(user, done) {
     done(null, user);
   });
-  
+
 passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
-  
+
 passport.use(
     new FacebookStrategy(
       {
@@ -89,7 +89,7 @@ app.use('/event', eventRouter)
 app.use('/quotes', require('./routes/quote'));
 
 app.get('', (req, res) => {
-    res.send("Hello There")
+    res.send("Hello World")
 })
 http.listen(PORT, ()=>{
     console.log('Server Started')
