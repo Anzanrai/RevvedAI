@@ -89,7 +89,7 @@ app.use('/event', eventRouter)
 app.use('/quotes', require('./routes/quote'));
 
 app.get('', (req, res) => {
-    res.send("Hello World")
+    res.send("Hello There")
 })
 http.listen(PORT, ()=>{
     console.log('Server Started')
