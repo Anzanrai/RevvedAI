@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const {User} = require('../models/user');
 const {successResponse, errorResponse} = require('../middleware/responseFormat');
 const { Teacher, Guardian } = require('../models/user');
 // const { json } = require('body-parser');
