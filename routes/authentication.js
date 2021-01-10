@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const {check} = require('express-validator');
+const {auth} = require('../middleware/auth');
 const {userRegistrationDataValidation} = require("../middleware/auth");
 
 const {RegisterUser, LoginUser, LogoutUser, GenerateOTPForLogin, VerifyOTPForLogin, FacebookLoginSuccess, FacebookLoginFail} = require("../controllers/authController");

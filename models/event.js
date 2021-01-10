@@ -1,6 +1,6 @@
 const { Timestamp } = require('mongodb');
 const mongoose = require('mongoose')
-const {Milestone}= require('./milestone')
+// const {Milestone}= require('./milestone')
 //import {Milestone} from './milestone'
 
 // const milestoneSchema= new mongoose.Schema({
@@ -22,16 +22,29 @@ const eventSchema= new mongoose.Schema({
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'MileStone'
     // }]
-    addeventMilestones: [{
-        milestonetype:{type: String, enum:['Assignment','Test','Projects'],required: true},
-        milestoneIsCompleted:{type: Boolean, default: false},
-        milestoneProgress: {type: Number, min: 0, max: 100},
-        milestoneDueDate:{type:Date,default:false},
-        milestoneName: {type: String, required: true},
-        milestonePhases: {type: String}
-    }]
+    // addeventMilestones: [{
+    //     milestonetype:{type: String, enum:['Assignment','Test','Projects'],required: true},
+    //     milestoneIsCompleted:{type: Boolean, default: false},
+    //     milestoneProgress: {type: Number, min: 0, max: 100},
+    //     milestoneDueDate:{type:Date,default:false},
+    //     milestoneName: {type: String, required: true},
+    //     milestonePhases: {type: String}
+    // }]
 });
 
+const Event = mongoose.model('Event', eventSchema)
+
+const milestoneSchema = new mongoose.Schema({
+    event: {type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
+    milestoneType: {type: String, enum: ['Assignment', 'Test', 'Project'], required: true},
+    milestoneIsCompleted: {type: Boolean, default: false},
+    milestoneProgress: {type: Number, min: 0, max: 100, default: 0},
+    milestoneDueDate: {type: Date},
+    milestoneName: {type: String, required: true},
+    student: {type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true}
+});
+
+const Milestone = mongoose.model('Milestone', milestoneSchema)
 // const createAssignmentMilestones = (eventDueDate) => {
 //     let milestonetype = "Assignment";
 //     let milestoneIsCompleted = false;
@@ -81,6 +94,9 @@ const eventSchema= new mongoose.Schema({
 // })
 
 //const milestone = mongoose.model('MileStone', milestoneSchema)
-const event = mongoose.model('Event', eventSchema)
 
-module.exports=event
+
+module.exports={
+    Event,
+    Milestone
+}

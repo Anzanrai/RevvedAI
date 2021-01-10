@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const SALT = 10;
 var uniqueValidator = require('mongoose-unique-validator');
+const student = require('./student');
 
 const userSchema = new mongoose.Schema({
     // username: {type: String, required: [true, "Username is required"], unique: [true, "Username already taken."], trim: true},
@@ -12,8 +13,20 @@ const userSchema = new mongoose.Schema({
     email: {type: String, unique: [true, "Account already registered with this email."], trim: true},
     // password: {type: String, required: [true, "Password is required"], minlength: 8},
     password: {type: String, minlength: 8},
-    userType: {type: String, required: [true, "User type is required"], enum: ["Student", "Teacher", "Guardian"], trim: true},
+    userType: {type: String, required: [true, "User type is required"], enum: ["Student", "Teacher", "Guardian"], default: "Student", trim: true},
     phone: {type: String, unique:[true, "This phone number is already registered."], trim: true},
+    firstName: {type: String},
+    lastName: {type: String},
+    address: [
+        {
+            streetName: {type: String, required: true},
+            streetNumber: {type: String, required: true},
+            suburb: {type: String, required: true},
+            city: {type: String, required: true},
+            state: {type: String, required: true},
+            zipcode: {type: Number, required: true}
+        }
+    ],
     fbId: {type: String}
 });
 
@@ -58,7 +71,7 @@ userSchema.statics.findByToken = function (token, callBack) {
     var user = this;
     jwt.verify(token, process.env.SECRETE, function (err, decode) {//this decode must give user_id if token is valid .ie decode=user_id
     
-    console.log(decode.toString());
+    console.log(decode);
     user.findById({ "_id": decode, "token": token }, function (err, user) {
         if (err) return callBack(err);
         callBack(null, user);
@@ -66,8 +79,46 @@ userSchema.statics.findByToken = function (token, callBack) {
     });
 };
 
+
 userSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model("User", userSchema)
+const User = mongoose.model("GenericUser", userSchema)
+
+const guardianSchema = new mongoose.Schema({});
+
+const Guardian = User.discriminator("Guardian", guardianSchema);
+
+// const teacherSchema = new mongoose.Schema();
+
+const studentSchema = new mongoose.Schema({
+    school: {
+        schoolName: {type: String},
+        schoolAddress: {
+            streetName: {type: String},
+            streetNumber: {type: String},
+            suburb: {type: String},
+            city: {type: String},
+            state: {type: String},
+            zipcode: {type: Number}
+        }
+    },
+    grade: {type: Number, required: true},
+    subjectsEnrolled: [
+        {type: mongoose.Schema.Types.ObjectId, ref: 'Content'}
+    ],
+    guardian: [
+        {type: mongoose.Schema.Types.ObjectId, ref: 'Guardian'}
+    ]
+})
+
+// const Student = mongoose.model('Student', studentSchema);
+
+const Student = User.discriminator('Student', studentSchema);
+
+module.exports = {
+    User,
+    Student,
+    Guardian
+}
 
 // 5fba337559074ed495c84341

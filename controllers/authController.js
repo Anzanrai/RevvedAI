@@ -1,5 +1,5 @@
-const User = require('../models/user');
-const {Student} = require("../models/student");
+const {User, Student} = require('../models/user');
+// const {Student} = require("../models/user");
 const {successResponse, validationErrorResponse, errorResponse} = require("../middleware/responseFormat");
 const {validationResult} = require("express-validator");
 
@@ -8,10 +8,6 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const revvedAIVerifyCode = process.env.REVVEDAI_VERIFY_CODE;
 const client = require('twilio')(accountSid, authToken);
-
-const generateOTP = (phone) => {
-    
-}
 
 
 exports.RegisterUser = async (req, res) => {
@@ -45,7 +41,7 @@ exports.GenerateOTPForLogin = (req, res) => {
             .catch(error => res.status(400).json(error))
         }
     })
-    
+
 }
 
 // verify otp and if successful, generate authToken and send it embedding in cookie
@@ -56,7 +52,7 @@ exports.VerifyOTPForLogin = (req, res) => {
     let valid = false;
     let user = {};
 
-    User.findOne({"phone": phone})
+    Student.findOne({"phone": phone})
     .then(success => {user = success})
     .catch(error => console.log(error))
     const resultObj = client.verify.services(revvedAIVerifyCode)
@@ -135,9 +131,15 @@ exports.getUserDetails= (req, res) => {
 };
 
 exports.FacebookLoginSuccess = (req, res) => {
+    console.log("At facebook login success controller", req);
     return res.send("Facebook login successful");
 }
 
 exports.FacebookLoginFail = (req, res) => {
     return res.send("Facebook login failed");
 }
+
+
+
+// read on api naming convention
+// open api specifications

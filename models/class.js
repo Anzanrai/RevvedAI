@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const classSchema = new mongoose.Schema({
     teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
+    grade: {type: String, required: true},
+    subject: {type: mongoose.Schema.Types.ObjectId, ref: 'Subject'},
     students: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -10,8 +12,8 @@ const classSchema = new mongoose.Schema({
     ]
 })
 
-const level = mongoose.model('Class', classSchema);
+// const level = mongoose.model('Class', classSchema);
 
 module.exports = {
-    level
+    Class: mongoose.model('Class', classSchema)
 }

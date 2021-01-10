@@ -1,8 +1,9 @@
-const User = require('../models/user');
+const {User} = require('../models/user');
 const {check} = require("express-validator");
 
 const auth = (req, res, next) => {
-    let token = req.cookies.authToken || req.headers["x-access-token"] || req.headers["authorization"]
+    // let token = req.cookies.authToken || req.headers["x-access-token"] || req.headers["authorization"]
+    let token = req.headers["x-access-token"] || req.headers["authorization"]
     
     if(!token) return res.status(401).send("Access denied. No token provided.");
 
@@ -14,17 +15,6 @@ const auth = (req, res, next) => {
         req.user = user;
         next();
     });
-
-    // try {
-    //     //if can verify the token, set req.user and pass to next middleware
-    //     const decoded = jwt.verify(token, process.env.SECRETE);
-    //     // console.log("At auth middleware", req.user);
-    //     req.user = decoded;
-    //     next();
-    //   } catch (ex) {
-    //     //if invalid token
-    //     res.status(400).send("Invalid token.");
-    //   }
 }
 module.exports = { 
     auth

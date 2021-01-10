@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const passport = require('passport');
 const strategy = require('passport-facebook');
 const FacebookStrategy = strategy.Strategy;
-const User = require('./models/user');
+const {User, Student} = require('./models/user');
 const { auth } = require('./middleware/auth')
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./controllers/authController');
 // const url ='mongodb://localhost:27017/studyapp'
@@ -51,42 +51,51 @@ passport.use(
         profileFields: ["email", "name"]
       },
       function(accessToken, refreshToken, profile, done) {
+        // console.log("At passport.use function", req);
           User.findOne({fbId: profile.id})
           .then(success => {
+            console.log("Access Token", accessToken);
+            console.log("Refresh Token", refreshToken);
               if(!!success) {
                 return done(null, profile);
               }
               else {
-
+                const { email, first_name, last_name } = profile._json;
+                console.log(profile._json);
+                const userData = {
+                  email,
+                  firstName: first_name,
+                  lastName: last_name,
+                  accessToken
+                };
+                // new User(userData).save();
+                return done(null, userData);
               }
           })
-          .catch(error)
-        const { email, first_name, last_name } = profile._json;
-        console.log(profile._json);
-        const userData = {
-          email,
-          firstName: first_name,
-          lastName: last_name
-        };
-        new User(userData).save();
-        done(null, profile);
+          .catch(error => {
+            console.log(error);
+          })
+        
         }
     )
 );
 
 app.use(passport.initialize());
 const userRouter = require('./routes/user');
-app.use('/user', userRouter);
+app.use('/users', userRouter);
 const authRouter = require('./routes/authentication');
 app.use('/auth', authRouter);
 
 const studentRouter =require('./routes/student')
-app.use('/student', studentRouter)
+app.use('/students', studentRouter)
+app.use('/students/:studentId/guardians', require('./routes/guardian'))
 
 const eventRouter =require('./routes/event');
 // const { UserInstance } = require('twilio/lib/rest/chat/v1/service/user');
-app.use('/event', eventRouter)
+app.use('/event', auth, eventRouter)
 app.use('/quotes', require('./routes/quote'));
+app.use('/study-contents', require('./routes/studyContent'));
+app.use('/template-messages', require('./routes/templateMessage'));
 
 app.get('', (req, res) => {
     res.send("Hello There")

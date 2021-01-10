@@ -2,36 +2,32 @@
 const express = require('express')
 
 const router= express.Router()
-const {Student} = require('../models/student')
-const {createStudentProfile, getStudentByUserID} = require('../controllers/studentController')
+// const {Student} = require('../models/student')
+const {registerStudent, getStudentById, getStudents, updateStudent} = require('../controllers/studentController')
+// const {registerStudent} = require('../controllers/studentController');
 
-router.get('/', async(req,res)=>{
-    //console.log('Get request')
-    try{
-        const student= await Student.find()
-        res.json(student)
+// router.get('/', async(req,res)=>{
+//     //console.log('Get request')
+//     try{
+//         const student= await Student.find()
+//         res.json(student)
 
-    }catch(err){
-        res.send('Error'+err)
-    }
+//     }catch(err){
+//         res.send('Error'+err)
+//     }
 
-})
+// })
 
+router.get('/', getStudents);
 
-router.get('/:id',async(req,res)=>{
-    //console.log('Get request')
-    try{
-        const student= await Student.findById(req.params.id)
-        res.json(student)
-
-    }catch(err){
-        res.send('Error'+err)
-    }
-
-})
+router.post('/', registerStudent);
 
 
-router.get('/profile/:userID', getStudentByUserID)
+router.get('/:id', getStudentById);
+router.patch('/:studentId', updateStudent);
+
+
+// router.get('/profile/:userID', getStudentByUserID)
 
 
 
@@ -54,33 +50,33 @@ router.get('/profile/:userID', getStudentByUserID)
 
 // })
 
-router.post('/', createStudentProfile);
+// router.post('/', createStudentProfile);
 // router.post('/otp_verify', verifyOTP);
 
-router.patch('/:id', async(req,res)=>{
-    try{
-        const student = await Student.findById(req.params.id)
-        /* student.firstName= req.body.firstName
-        student.lastName= req.body.lastName
-        student.groupID=req.body.groupID
-        student.attendanceID=req.body.attendanceID
-        student.password= req.body.password
-        student.username= req.body.username
-        student.semester= req.body.semester
-        student.email= req.body.email
-        student.phone= req.body.phone */
+// router.patch('/:id', async(req,res)=>{
+//     try{
+//         const student = await Student.findById(req.params.id)
+//         /* student.firstName= req.body.firstName
+//         student.lastName= req.body.lastName
+//         student.groupID=req.body.groupID
+//         student.attendanceID=req.body.attendanceID
+//         student.password= req.body.password
+//         student.username= req.body.username
+//         student.semester= req.body.semester
+//         student.email= req.body.email
+//         student.phone= req.body.phone */
         
-        student.firstName= req.body.firstName
+//         student.firstName= req.body.firstName
 
-        student.address = req.body.address
+//         student.address = req.body.address
 
 
         
-        const s1=await student.save()
-        res.json(s1)
+//         const s1=await student.save()
+//         res.json(s1)
 
-    }catch(err){
-        res.send('Error')
-    }
-})
+//     }catch(err){
+//         res.send('Error')
+//     }
+// })
 module.exports = router

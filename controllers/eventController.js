@@ -1,12 +1,14 @@
-const Event = require('../models/event');
-const {Milestone} = require('../models/milestone');
+const {Event, Milestone} = require('../models/event');
+const {TemplateMessage} = require('../models/templateMessage');
+// const {Milestone} = require('../models/milestone');
 const { successResponse, errorResponse } = require('../middleware/responseFormat');
 const { db } = require('../models/event');
 
 const getEvents = (req, res) => {
     // const studentId = req.query.studentId;
-
-    Event.find(req.query)
+    let filterParams = Object.assign({}, req.query);
+    filterParams['student'] = req.user.id;
+    Event.find(filterParams)
     .then(success => {
         res.status(200).json(successResponse("OK", success, res.statusCode));
     })
@@ -50,64 +52,133 @@ const getMilestonePhases = async (eventType) => {
 }
 
 
-const registerEvent = async (req, res) => {
-    let event  = new Event(req.body)
-    let milestonephases = await getMilestonePhases(event.eventType);
-    milestonephases.forEach(phase => {
-        event.addeventMilestones.push({
-            "milestonetype": event.eventType,
-            "milestoneIsCompleted": false,
-            "milestoneProgress": 0,
-            "milestoneDueDate": event.eventDate,
-            "milestoneName": phase,
-        })
-    })
+const registerEvent = (req, res) => {
+    let eventObj = Object.assign({}, req.body);
+    eventObj['student'] = req.user.id;
+    let event  = new Event(eventObj);
     event.save()
     .then(success=> {
-        res.status(201).json(successResponse("Event Created", success, res.statusCode));
+        return success
+    })
+    .then(success => {
+        getMilestonePhases(event.eventType)
+        .then(milestonephases => {
+            milestonephases.map(phase => {
+                let milestone = new Milestone({
+                    'event': success.id,
+                    'milestoneType': event.eventType,
+                    'milestoneDueDate': event.eventDate,
+                    'milestoneName': phase,
+                    'student': req.user.id
+                })
+                milestone.save()
+            })
+        })
+        .catch(error => {
+            res.status(400).json(errorResponse(error, res.statusCode));
+        })
+        // console.log(milestonephases);
+        
+        res.status(201).json(successResponse("OK", success, res.statusCode));
     })
     .catch(error=> {
+        console.log(error);
         res.status(400).json(errorResponse("Error creating an event.", res.statusCode));
     })
 }
 
 
 const updateEvent = (req, res) => {
-    let event = Event.findById(req.params.id)
-        event.eventName= req.body.eventName
-        event.eventType=req.body.eventType
-        event.eventDate= req.body.eventDate
-        event.eventDueDate=req.body.eventDueDate
-        event.eventDescription= req.body.eventDescription
-    event.save()
+    Event.findOneAndUpdate(req.params.id, {$set: req.body})
     .then(success=> {
-        res.status(200).json(success)
+        res.status(200).json(successResponse("Updated Successfully", success, res.statusCode));
     })
     .catch(error=> {
-        res.status(400).json({error})
+        res.status(400).json(errorResponse(error, res.statusCode));
+    })
+}
+
+const getPendingMilestones = (req, res) => {
+    // console.log("At getMilestones", req.user);
+    let filterParams = {
+        student: req.user.id,
+        milestoneIsCompleted: false,
+        milestoneDueDate: {$gte: new Date()}
+    }
+    // Milestone.find()
+    Milestone.count(filterParams)
+    .then(success => {
+        res.status(200).json(successResponse("OK", success.toString()+" Pending Action Items for today.", res.statusCode));
+    })
+    .catch(error => {
+        res.status(400).json(errorResponse(error, res.statusCode));
+    })
+}
+
+const getPendingMilestonesForStatusUpdate = (req, res) => {
+    let filterParams = {
+        student: req.user.id,
+        milestoneIsCompleted: false,
+        milestoneDueDate: {$gte: new Date()}
+    }
+    Milestone.find(filterParams)
+    .then(success => {
+        if(success.length){
+            let responseObjects = [];
+            TemplateMessage.findOne({"tag": "milestone-status-update"})
+            .then(templateMessage => {
+                success.map(milestone => {
+                    let {event, milestoneType, milestoneIsCompleted, milestoneDueDate, milestoneName, milestoneProgress, student} = milestone;
+                    let [messagePartOne, messagePartTwo] = templateMessage.template[0].message.split(",");
+                    let resObj = {
+                        displayMessage: messagePartOne+" "+milestone.milestoneName+" "+messagePartTwo,
+                        id: milestone.id,
+                        event,
+                        milestoneType,
+                        milestoneIsCompleted,
+                        milestoneProgress,
+                        milestoneDueDate,
+                        milestoneName,
+                        student
+                    }
+                    responseObjects.push(resObj);
+                })
+                res.status(200).json(successResponse("OK", responseObjects, res.statusCode));
+            })
+            .catch(error => {
+                console.log("Inner block", error);
+                res.status(400).json(errorResponse(error, res.statusCode));
+            })
+        }
+    })
+    .catch(error => {
+        console.log("Outer block", error);
+        res.status(400).json(errorResponse(error, res.statusCode));
+    })
+}
+
+const getEventSpecificMilestones = (req, res) => {
+    Milestone.find({event: req.params.id})
+    .then(success => {
+        res.status(200).json(successResponse("OK", success, res.statusCode));
+    })
+    .catch(error => {
+        res.status(400).json(errorResponse(error, res.statusCode));
     })
 }
 
 const updateMilestone = (req, res) => {
-    let {eventId, milestoneId} = req.params;
-    let payload = {};
-    let updateObject = {};
-
-    // make a copy of request payload
-    Object.assign(payload, req.body);
-    // const payload = req.body;
-    // console.log(payload)
-
-    // create a new object with update field names for sub-documents.
-    for( const [key, value] of Object.entries(payload)){
-        let keyName = 'addeventMilestones.$.' + key;
-        updateObject[keyName] = value
+    let filterParams = {
+        'student': req.user.id,
+        '_id': req.params.milestoneId
     }
-    
-    // find and update sub-document with provided payload.
-    Event.findOneAndUpdate({"addeventMilestones._id": milestoneId}, {$set: updateObject})
-    .then(success => res.status(200).json(successResponse("OK", success, res.statusCode)))
-    .catch(error=> res.status(500).json(errorResponse(error, res.statusCode)))
+    Milestone.findOneAndUpdate(filterParams, {$set: req.body}, {new: true})
+    .then(success => {
+        res.status(200).json(successResponse("Updated Successfully", success, res.statusCode))
+    })
+    .catch(error => {
+        res.status(400).json(errorResponse(error, res.statusCode))
+    })
 };
 
 module.exports = {
@@ -116,5 +187,8 @@ module.exports = {
     updateEvent,
     registerEvent,
     getEventsByStudentID,
-    updateMilestone
+    updateMilestone,
+    getPendingMilestones,
+    getEventSpecificMilestones,
+    getPendingMilestonesForStatusUpdate
 }
