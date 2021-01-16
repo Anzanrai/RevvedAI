@@ -3,7 +3,7 @@ const { successResponse, errorResponse } = require('../middleware/responseFormat
 
 const getAllStudyContents = (req, res) => {
     const queryParams = req.query;
-    StudyContent.find(queryParams)
+    Content.find(queryParams)
     .then(success => {
         res.status(200).json(successResponse("OK", success, res.statusCode));
     })

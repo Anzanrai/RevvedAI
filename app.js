@@ -96,6 +96,7 @@ app.use('/event', auth, eventRouter)
 app.use('/quotes', require('./routes/quote'));
 app.use('/study-contents', require('./routes/studyContent'));
 app.use('/template-messages', require('./routes/templateMessage'));
+app.use('/v01/api-contracts', require('./routes/contract'));
 
 app.get('', (req, res) => {
     res.send("Hello There")
