@@ -21,12 +21,26 @@ const getLoggedInHomeScreen = async(req, res) => {
 }
 
 const getPersonalDetailScreen = async(req, res) => {
-    const screenContract = await Contract.findOne({"screenName": "personalDetailsScreen"});
+    const screenContract = await Contract.findOne({"screenName": "personalDetailScreen"});
     if(!screenContract){
         res.status(400).json(errorResponse("Error in getting personal detail screen contract", res.statusCode));
     } else {
-        res.status(200).json(successResponse("OK", screenContract, res.statusCode));
+        const screenContractObject = screenContract.toObject();
+        const user = await User.findOne({"_id": req.user.id})
+        screenContractObject.components[1].sections[0].heading4 = JSON.stringify({Name: user.firstName +' '+ user.lastName, 'School/Institute': user.school.schoolName || null, 'ID No.': null})
+        screenContractObject.components[1].sections[1].heading4 = JSON.stringify({M: user.phone, E: user.email})
+        res.status(200).json(successResponse("OK", screenContractObject, res.statusCode));
     }
+}
+
+const getContracts = (req, res) => {
+    Contract.find()
+    .then(success => {
+        res.status(200).json(successResponse("OK", success, res.statusCode));
+    })
+    .catch(error => {
+        res.status(400).json(errorResponse(error, res.statusCode));
+    })
 }
 
 const registerContract = (req, res) => {
@@ -42,5 +56,7 @@ const registerContract = (req, res) => {
 
 module.exports = {
     getLoggedInHomeScreen,
+    getPersonalDetailScreen,
+    getContracts,
     registerContract
 }
