@@ -33,6 +33,15 @@ const getPersonalDetailScreen = async(req, res) => {
     }
 }
 
+const getPersonalDetailUpdateScreen = async (req, res) => {
+    const screenContract = await Contract.findOne({"screenName": "personalDetailUpdateScreen"});
+    if(!screenContract){
+        res.status(400).json(errorResponse("Error in retrieving personal detail update screen contract", res.statusCode))
+    } else {
+        res.status(200).json(successResponse("OK", screenContract, res.statusCode));
+    }
+}
+
 const getContracts = (req, res) => {
     Contract.find()
     .then(success => {
@@ -57,6 +66,7 @@ const registerContract = (req, res) => {
 module.exports = {
     getLoggedInHomeScreen,
     getPersonalDetailScreen,
+    getPersonalDetailUpdateScreen,
     getContracts,
     registerContract
 }
