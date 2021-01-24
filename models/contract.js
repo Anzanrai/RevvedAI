@@ -2,6 +2,10 @@ const mongooseUniqueValidator = require("mongoose-unique-validator");
 
 const mongoose = require('mongoose');
 
+const componentSchema = mongoose.Schema({
+    componentType: {type: String, unique: true}
+}, {strict: false})
+
 const contractSchema = mongoose.Schema({
     screenName: {type: String, unique: true},
     components: [
@@ -21,5 +25,6 @@ const contractSchema = mongoose.Schema({
 }, {strict: false})
 
 module.exports = {
-    Contract: mongoose.model("Contract", contractSchema)
+    Contract: mongoose.model("Contract", contractSchema),
+    Component: mongoose.model("Component", componentSchema)
 }
