@@ -184,7 +184,16 @@ const registerContract = (req, res) => {
         res.status(400).json(errorResponse(error, res.statusCode))
     })
 }
-
+const getAboutEQuTool(req, res) {
+    let newContract = new Contract(req.body);
+    newContract.save()
+        .then(success => {
+            res.status(201).json("New contract created", success, res.statusCode);
+        })
+        .catch(error => {
+            res.status(400).json(errorResponse(error, res.statusCode));
+        })
+}
 module.exports = {
     getComponent,
     createComponent,
@@ -199,5 +208,6 @@ module.exports = {
     getOtpEntryScreen,
     getRegistrationWelcomeScreen1,
     getContracts,
+    getAboutEQuTool,
     registerContract
 }
