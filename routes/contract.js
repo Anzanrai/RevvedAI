@@ -4,7 +4,7 @@ const router = express.Router();
 const {auth} = require('../middleware/auth');
 const {getLoggedInHomeScreen, registerContract, getPersonalDetailScreen, getContracts, getPersonalDetailUpdateScreen, 
     getStatusUpdateScreen, getSplashScreen, getWelcomeScreen, getComponent, createComponent, updateComponent, 
-    getMobileNumberEntryScreenContract, getOtpEntryScreen, getRegistrationWelcomeScreen1, getAboutEQuTool} = require('../controllers/contracts');
+    getMobileNumberEntryScreenContract, getOtpEntryScreen, getRegistrationWelcomeScreen1, getAboutEQuTool, getFirstScreenAboutEquTool,getSecondScreenAboutEquTool,getThirdScreenAboutEquTool} = require('../controllers/contracts');
 
 
 router.get('/', getContracts);
@@ -20,7 +20,10 @@ router.get('/personalDetailUpdateScreen', auth, getPersonalDetailUpdateScreen);
 router.get('/mobileEntryScreen', getMobileNumberEntryScreenContract);
 router.get('/otpEntryScreen', getOtpEntryScreen);
 router.get('/registrationWelcomeScreen1', getRegistrationWelcomeScreen1);
-router.get('/getAboutEQuTool', getAboutEQuTool);
+router.get('/AboutEQuTool', getAboutEQuTool);
+router.get('/FirstScreenAboutEquTool', getFirstScreenAboutEquTool);
+router.get('/SecondScreenAboutEquTool',getSecondScreenAboutEquTool);
+router.get('/ThirdScreenAboutEquTool',getThirdScreenAboutEquTool);
 router.post('/', registerContract);
 
 module.exports = router;

@@ -184,15 +184,44 @@ const registerContract = (req, res) => {
         res.status(400).json(errorResponse(error, res.statusCode))
     })
 }
-const getAboutEQuTool(req, res) {
-    let newContract = new Contract(req.body);
-    newContract.save()
-        .then(success => {
-            res.status(201).json("New contract created", success, res.statusCode);
-        })
-        .catch(error => {
-            res.status(400).json(errorResponse(error, res.statusCode));
-        })
+const getAboutEQuTool = (req, res) => {
+    Contract.findOne({"screenName": "AboutEQuTool"})
+    .then(success => {
+        res.status(200).json(successResponse("OK", success, res.statusCode));
+    })
+    .catch(error => {
+        res.status(400).json(errorResponse(error, res.statusCode));
+    })
+}
+
+const getFirstScreenAboutEquTool = (req, res) => {
+    Contract.findOne({"screenName": "FirstScreenAboutEquTool"})
+    .then(success => {
+        res.status(200).json(successResponse("OK", success, res.statusCode));
+    })
+    .catch(error => {
+        res.status(400).json(errorResponse(error, res.statusCode));
+    })
+}
+
+const getSecondScreenAboutEquTool = (req, res) => {
+    Contract.findOne({"screenName": "SecondScreenAboutEquTool"})
+    .then(success => {
+        res.status(200).json(successResponse("OK", success, res.statusCode));
+    })
+    .catch(error => {
+        res.status(400).json(errorResponse(error, res.statusCode));
+    })
+}
+
+const getThirdScreenAboutEquTool = (req, res) => {
+    Contract.findOne({"screenName": "ThirdScreenAboutEquTool"})
+    .then(success => {
+        res.status(200).json(successResponse("OK", success, res.statusCode));
+    })
+    .catch(error => {
+        res.status(400).json(errorResponse(error, res.statusCode));
+    })
 }
 module.exports = {
     getComponent,
@@ -209,5 +238,8 @@ module.exports = {
     getRegistrationWelcomeScreen1,
     getContracts,
     getAboutEQuTool,
+    getFirstScreenAboutEquTool,
+    getSecondScreenAboutEquTool,
+    getThirdScreenAboutEquTool,
     registerContract
 }
